@@ -1,0 +1,244 @@
+#+title: My dreams job
+#+author: Marissa Mayer
+#+tagline: Business Woman and Proud Geek
+#+email: mmayer@yahoo-inc.com
+#+github: mmayer
+#+gitlab: mmayer
+#+address: My Awesome crib
+#+location: Fantastic city -- Planet Earth
+#+linkedin: marissamayer
+#+orcid: 0000-0000-0000-0000
+#+phone: (+1) 234567890
+#+homepage: example.com
+#+photo: mmayer-wikipedia-cc-by-2_0.jpg
+#+latex_header: \graphicspath{{./example/}}
+#+latex_header: \input{pubs-num.cfg}
+#+latex_header: \addbibresource{sample.bib}
+#+column_ratio: 0.6
+#+macro: divider @@latex:\divider@@
+
+# Start a 2-column paracol. Both the left and right columns will automatically
+# break across pages if things get too long.
+#+latex: \begin{paracol}{2}
+* Experience
+:properties:
+:cventry: cvsection
+:end:
+** President & CEO
+:properties:
+:CVENTRY: cvevent
+:COMPANY: Yahoo!
+:FROM: July 2012
+:TO: Ongoing
+:LOCATION: Sunnyvale, CA
+:end:
+
+- Led the $5 billion acquisition of the company with Verizon -- the entity which believed most in the immense value Yahoo! has created
+- Acquired Tumblr for $1.1 billion and moved the company's blog there
+- Built Yahoo's mobile, video and social businesses from nothing in 2011 to $1.6 billion in GAAP revenue in 2015
+- Tripled the company's mobile base to over 600 million monthly active users and generated over $1 billion of mobile advertising revenue last year
+{{{divider}}}
+** Vice President of Location & Services
+:properties:
+:cventry: cvevent
+:company: Google
+:from: Oct 2010
+:to: July 2012
+:location: Palo Alto, CA
+:end:
+- Position Google Maps as the world leader in mobile apps and navigation
+- Oversaw 1000+ engineers and product managers working on Google Maps, Google Places and Google Earth
+{{{divider}}}
+** Vice President of Search Products & UX
+:properties:
+:cventry: cvevent
+:company: Google
+:from: 2005
+:to: 2010
+:location: Palo Alto, CA
+:end:
+{{{divider}}}
+** Product Manager & UI Lead
+:properties:
+:cventry: cvevent
+:company: Google
+:from: Oct 2001
+:to: July 2005
+:location: Palo Alto, CA
+:end:
+- Appointed by the founder Larry Page in 2001 to lead the Product Management and User Interaction teams
+- Optimized Google's homepage and A/B tested every minor detail to increase usability (incl.~spacing between words, color schemes and pixel-by-pixel element alignment)
+* A Day of My Life
+:properties:
+:cventry: cvsection
+:end:
+
+#+begin_export latex
+% Adapted from @Jake's answer from http://tex.stackexchange.com/a/82729/226
+% \wheelchart{outer radius}{inner radius}{
+% comma-separated list of value/text width/color/detail}
+% Some ad-hoc tweaking to adjust the labels so that they don't overlap
+\hspace*{-1em}  %% quick hack to move the wheelchart a bit left
+\wheelchart{1.5cm}{0.5cm}{%
+  10/13em/accent!30/Sleeping \& dreaming about work,
+  25/9em/accent!60/Public resolving issues with Yahoo!\ investors,
+  5/11em/accent!10/\footnotesize\\[1ex]New York \& San Francisco Ballet Jawbone board member,
+  20/11em/accent!40/Spending time with family,
+  5/8em/accent!20/\footnotesize Business development for Yahoo!\ after the Verizon acquisition,
+  30/9em/accent/Showing Yahoo!\ \mbox{employees} that their work has meaning,
+  5/8em/accent!20/Baking cupcakes
+}
+#+end_export
+#+latex: \newpage
+* Publications
+:properties:
+:cventry: cvsection
+:end:
+#+begin_export latex
+%% Specify your last name(s) and first name(s) as given in the .bib to automatically bold your own name in the publications list.
+%% One caveat: You need to write \bibnamedelima where there's a space in your name for this to work properly; or write \bibnamedelimi if you use initials in the .bib
+%% You can specify multiple names, especially if you have changed your name or if you need to highlight multiple authors.
+\mynames{Lim/Lian\bibnamedelima Tze,
+  Wong/Lian\bibnamedelima Tze,
+  Lim/Tracy,
+  Lim/L.\bibnamedelimi T.}
+%% MAKE SURE THERE IS NO SPACE AFTER THE FINAL NAME IN YOUR \mynames LIST
+
+\nocite{*}
+
+\printbibliography[heading=pubtype,title={\printinfo{\faBook}{Books}},type=book]
+\divider
+\printbibliography[heading=pubtype,title={\printinfo{\faFile*[regular]}{Journal Articles}}, type=article]
+\divider
+\printbibliography[heading=pubtype,title={\printinfo{\faUsers}{Conference Proceedings}},type=inproceedings]
+#+end_export
+# Switch to the right column. This will now automatically move to the second
+# page if the content is too long.
+#+latex: \switchcolumn
+* Life Philosophy
+:properties:
+:cventry: cvsection
+:end:
+#+begin_quote
+"If you don't have any shadows, you're not standing in the light."
+#+end_quote
+* Most Proud of
+:properties:
+:cventry: cvsection
+:end:
+** Courage I had
+:properties:
+:cventry: cvachievement
+:icon: faTrophy
+:end:
+to take a sinking ship and try to make it float
+** Persistence & Loyalty
+:properties:
+:cventry: cvachievement
+:icon: faHeartbeat
+:end:
+I showed despite the hard moments and my willingness to stay with Yahoo after the acquisition
+** Google's Growth
+:properties:
+:cventry: cvachievement
+:icon: faChartLine
+:end:
+from a hundred thousand searches per day to over a billion
+** Inspiring women in tech
+:properties:
+:cventry: cvachievement
+:icon: faFemale
+:end:
+Youngest CEO on Fortune's list of 50 most powerful women
+* Strengths
+:properties:
+:cventry: cvsection
+:end:
+** Hard-working (18/24)
+:properties:
+:cventry: cvtag
+:end:
+** Persuasive
+:properties:
+:cventry: cvtag
+:end:
+#+latex: \\
+** Motivator & Leader
+:properties:
+:cventry: cvtag
+:end:
+#+latex: \\ \divider\smallskip \\
+** UX
+:properties:
+:cventry: cvtag
+:end:
+** Mobile Devices & Applications
+:properties:
+:cventry: cvtag
+:end:
+** Product Management & Marketing
+:properties:
+:cventry: cvtag
+:end:
+* Languages
+:properties:
+:cventry: cvsection
+:end:
+** English
+:properties:
+:cventry: cvskill
+:skill_level: 5
+:end:
+** Spanish
+:properties:
+:cventry: cvskill
+:skill_level: 4
+:end:
+** German
+:properties:
+:cventry: cvskill
+:skill_level: 3.5
+:end:
+* Education
+:properties:
+:cventry: cvsection
+:end:
+** M.S. in Computer Science
+:properties:
+:CVENTRY: cvevent
+:COMPANY: Stanford University
+:FROM: Sept 1997
+:TO: June 1999
+:LOCATION: 
+:end:
+
+** B.S. in Symbolic Systems
+:properties:
+:CVENTRY: cvevent
+:COMPANY: Stanford University
+:FROM: Sept 1993
+:TO: June 1997
+:LOCATION: 
+:end:
+#+latex: \newpage
+* Referees
+:properties:
+:cventry: cvsection
+:end:
+** Prof. Alpha Beta
+:properties:
+:cventry: cvref
+:ref_inst: Institute
+:ref_email: a.beta@university.edu
+:ref_address: Address Line 1\\Address line 2
+:end:
+{{{divider}}}
+** Prof. Gamma Delta
+:properties:
+:cventry: cvref
+:ref_inst: Institute
+:ref_email: g.delta@university.edu
+:ref_address: Address Line 1\\Address line 2
+:end:
+#+latex: \end{paracol}
+

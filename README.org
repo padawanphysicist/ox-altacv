@@ -1,0 +1,7 @@
+#+title: AltaCV exporter for Org Mode
+
+Org Mode export backend for [[https://github.com/liantze/AltaCV][AltaCV]].
+
+* Configuration and Example
+
+Please refer to the [[file:example/mmayer.org][example file]].
