@@ -34,18 +34,14 @@
 (unless (assoc "altacv" org-latex-classes)
   (add-to-list 'org-latex-classes
 	       '("altacv"
-		     "% Beginning of the document
-\\documentclass[10pt,a4paper,ragged2e,withhyper]{altacv}
+		     "\\documentclass[10pt,a4paper,ragged2e,withhyper]{altacv}
 [NO-DEFAULT-PACKAGES]
 [NO-PACKAGES]
-% Change the page layout if you need to
+
 \\geometry{left=1.25cm,right=1.25cm,top=1.5cm,bottom=1.5cm,columnsep=1.2cm}
-% The paracol package lets you typeset columns of text in parallel
+
 \\usepackage{paracol}
-% Change the font if you want to, depending on whether
-% you're using pdflatex or xelatex/lualatex
-% WHEN COMPILING WITH XELATEX PLEASE USE
-% xelatex -shell-escape -output-driver='xdvipdfmx -z 0' mmayer.tex
+
 \\ifxetexorluatex
   % If using xelatex or lualatex:
   \\setmainfont{Lato}
@@ -53,27 +49,24 @@
   % If using pdflatex:
   \\usepackage[default]{lato}
 \\fi
-% Change the colours if you want to
+
 \\definecolor{VividPurple}{HTML}{3E0097}
 \\definecolor{SlateGrey}{HTML}{2E2E2E}
 \\definecolor{LightGrey}{HTML}{666666}
-% \\colorlet{name}{black}
-% \\colorlet{tagline}{PastelRed}
 \\colorlet{heading}{VividPurple}
 \\colorlet{headingrule}{VividPurple}
-% \\colorlet{subheading}{PastelRed}
 \\colorlet{accent}{VividPurple}
 \\colorlet{emphasis}{SlateGrey}
 \\colorlet{body}{LightGrey}
-% Change the bullets for itemize and rating marker
-% for \\cvskill if you want to
+
 \\renewcommand{\\cvItemMarker}{{\\small\\textbullet}}
 \\renewcommand{\\cvRatingMarker}{\\faCircle}
-% ...and the markers for the date/location for \\cvevent
-% \\renewcommand{\\cvDateMarker}{\\faCalendar*[regular]}
-% \\renewcommand{\\cvLocationMarker}{\\faMapMarker*}
+
 \\usepackage{newfields}
-[EXTRA]"
+
+[EXTRA]
+
+"
 		 ("\\cvevent{%s}" . "\\cvevent*{%s}")
 		 ("\\subsection{%s}" . "\\subsection*{%s}")
 		 ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
@@ -81,7 +74,7 @@
 ;;; User-Configurable Variables
 
 (defgroup org-export-altacv nil
-  "Options specific for using the beamer class in LaTeX export."
+  "Options specific for using the altacv class in LaTeX export."
   :tag "Org AltaCV"
   :group 'org-export
   :version "24.2")
@@ -125,55 +118,73 @@
 
 ;;; Transcode Functions
 (defun org-altacv--format-cvevent (headline contents info)
-  (concat (format "\\cvevent{%s}{%s}{%s--%s}{%s}\n"
-                      (org-export-data
-                (org-element-property :title headline)
-	            info)
-                      (org-element-property :COMPANY headline)
-                      (org-element-property :FROM headline)
-                      (org-element-property :TO headline)
-                      (org-element-property :LOCATION headline)
-                      )
-          contents))
+  (let* ((headline-title (org-element-property :title headline))
+         (title (org-export-data headline-title info))
+         (company (org-element-property :COMPANY headline))
+         (from (org-element-property :FROM headline))
+         (to (org-element-property :TO headline))
+         (location (org-element-property :LOCATION headline)))
+    (format "\\cvevent{%s}{%s}{%s -- %s}{%s}
+
+%s"
+            title
+            company 
+            from 
+            to 
+            location
+            contents)))
+
 (defun org-altacv--format-cvachievement (headline contents info)
-  (format "\\cvachievement{\\%s}{%s}{%s}\n"
-          (org-element-property :ICON headline)
-          (org-export-data
-           (org-element-property :title headline)
-	       info)
-          (replace-regexp-in-string
-           "\n$" "" 
-           contents)))
+  (let* ((headline-title (org-element-property :title headline))
+         (title (org-export-data headline-title info))
+         (icon (org-element-property :ICON headline))
+         (new-contents (replace-regexp-in-string
+                        "\n$" "" 
+                        contents)))
+    (format "\\cvachievement{\\%s}{%s}{%s}"
+          icon
+          title
+          new-contents)))
+
 (defun org-altacv--format-cvskill (headline contents info)
-  (format "\\cvskill{%s}{%s}\n"                  
-          (org-export-data
-           (org-element-property :title headline)
-	       info)
-          (org-element-property :SKILL_LEVEL headline)))
+  (let* ((headline-title (org-element-property :title headline))
+         (title (org-export-data headline-title info))
+         (skill-level (org-element-property :SKILL_LEVEL headline)))
+         (format "\\cvskill{%s}{%s}\n"                  
+                 title
+                 skill-level)))
+
 (defun org-altacv--format-cvref (headline contents info)
-  (format "\\cvref{%s}{%s}{%s}{%s}\n"                  
-          (org-export-data
-           (org-element-property :title headline)
-	       info)
-          (org-element-property :REF_INST headline)
-          (org-element-property :REF_EMAIL headline)
-          (org-element-property :REF_ADDRESS headline)))
+  (let* ((headline-title (org-element-property :title headline))
+         (title (org-export-data headline-title info))
+         (ref-institution (org-element-property :REF_INST headline))
+         (ref-address (org-element-property :REF_ADDRESS headline))
+         (ref-email (org-element-property :REF_EMAIL headline))
+         (new-contents (if (org-string-nw-p contents)
+                           (format "%s" contents) "")))
+    (format "\\cvref{%s}{%s}{%s}{%s}
+
+%s"                  
+            title
+            ref-institution
+            ref-email
+            ref-address
+            new-contents)))
 
 ;;;; Headline
 (defun org-altacv-headline (headline contents info)
-  "Transcode HEADLINE element into Beamer code.
+  "Transcode HEADLINE element into AltaCV code.
 CONTENTS is the contents of the headline.  INFO is a plist used
 as a communication channel.
 Depending on the tag of the headline it is considered a section, an event...."
-  (let ((level (org-export-get-relative-level headline info))
-        (tags (org-element-property :tags headline))
-        (title (org-export-data
-                (org-element-property :title headline)
-	            info))
-        (entry-type (org-element-property :CVENTRY headline)))    
+  (let* ((level (org-export-get-relative-level headline info))
+         (tags (org-element-property :tags headline))
+         (headline-title (org-element-property :title headline))
+         (title (org-export-data headline-title info))
+         (entry-type (org-element-property :CVENTRY headline)))    
     (cond
      ((string= entry-type "cvsection")
-      (concat (format "\\cvsection{%s}\n" title)
+      (concat (format "\n\\cvsection{%s}\n\n" title)
               contents))
      ((string= entry-type "cvevent")
       (org-altacv--format-cvevent headline contents info))
@@ -184,11 +195,11 @@ Depending on the tag of the headline it is considered a section, an event...."
      ((string= entry-type "cvref")
       (org-altacv--format-cvref headline contents info))
      ((string= entry-type "cvtag")
-      (concat (format "\\cvtag{%s}" title)))
+      (format "\\cvtag{%s}%s" title (if contents contents "" )))
      (t (format "\\section{%s}\n" title)))
     ))
 (defun org-altacv-template (contents info)
-  "Return complete document string after Beamer conversion.
+  "Return complete document string after AltaCV conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   (concat
@@ -196,7 +207,7 @@ holding export options."
    (format-time-string "%% Created %Y-%m-%d %a %H:%M\n")
    ;; Document class and packages.
    (org-latex-make-preamble info)
-   "\\begin{document}\n"
+   "\n\\begin{document}\n"
    ;; Author
    (let ((author (and (plist-get info :with-author)
 			(let ((auth (plist-get info :author)))
@@ -204,14 +215,17 @@ holding export options."
      (format "\\name{%s}\n" author))
    ;; Tagline
    (let ((tagline (plist-get info :tagline)))
-     (format "  \\tagline{%s}\n" tagline))
+     (when tagline
+       (format "  \\tagline{%s}\n" tagline)))
    ;; Photo
    (let ((photo (plist-get info :photo)))
-     (format "\\photoR{2.5cm}{%s}\n" photo))
+     (when photo
+       (format "\\photoR{2.5cm}{%s}\n" photo)))
    "\\personalinfo{%\n"
    ;; Email
    (let ((email (plist-get info :email)))
-     (format "  \\email{%s}\n" email))
+     (when email
+       (format "  \\email{%s}\n" email)))
    ;; Address
    (let ((addr (plist-get info :address)))
      (format "  \\mailaddress{%s}\n" addr))
@@ -238,6 +252,7 @@ holding export options."
      (format "  \\phone{%s}\n" phone))
    "}\n"
    "\\makecvheader\n"
+   "\\AtBeginEnvironment{itemize}{\\small}"
    ;; Column ratio
    (let ((column-ratio (plist-get info :column_ratio)))
      (format "\\columnratio{%s}" column-ratio))
@@ -246,10 +261,11 @@ holding export options."
    ))
 
 ;;; Commands
+
 ;;;###autoload
 (defun org-altacv-export-as-latex
   (&optional async subtreep visible-only body-only ext-plist)
-  "Export current buffer as a Beamer buffer.
+  "Export current buffer as a AltaCV buffer.
 If narrowing is active in the current buffer, only export its
 narrowed part.
 If a region is active, export that region.
@@ -266,16 +282,17 @@ between \"\\begin{document}\" and \"\\end{document}\".
 EXT-PLIST, when provided, is a property list with external
 parameters overriding Org default settings, but still inferior to
 file-local settings.
-Export is done in a buffer named \"*Org BEAMER Export*\", which
+Export is done in a buffer named \"*Org AltaCV Export*\", which
 will be displayed when `org-export-show-temporary-export-buffer'
 is non-nil."
   (interactive)
   (org-export-to-buffer 'altacv "*Org AltaCV Export*"
     async subtreep visible-only body-only ext-plist (lambda () (LaTeX-mode))))
+
 ;;;###autoload
 (defun org-altacv-export-to-latex
   (&optional async subtreep visible-only body-only ext-plist)
-  "Export current buffer as a Beamer presentation (tex).
+  "Export current buffer as a AltaCV document (tex).
 If narrowing is active in the current buffer, only export its
 narrowed part.
 If a region is active, export that region.
@@ -297,10 +314,11 @@ Return output file's name."
   (let ((file (org-export-output-file-name ".tex" subtreep)))
     (org-export-to-file 'altacv file
       async subtreep visible-only body-only ext-plist)))
+
 ;;;###autoload
 (defun org-altacv-export-to-pdf
   (&optional async subtreep visible-only body-only ext-plist)
-  "Export current buffer as a Beamer presentation (PDF).
+  "Export current buffer as a AltaCV document (PDF).
 If narrowing is active in the current buffer, only export its
 narrowed part.
 If a region is active, export that region.
@@ -323,22 +341,24 @@ Return PDF file's name."
     (org-export-to-file 'altacv file
       async subtreep visible-only body-only ext-plist
       (lambda (file) (org-latex-compile file)))))
+
 ;;;###autoload
 (defun org-altacv-publish-to-latex (plist filename pub-dir)
-  "Publish an Org file to a Beamer presentation (LaTeX).
+  "Publish an Org file to a AltaCV document (LaTeX).
 FILENAME is the filename of the Org file to be published.  PLIST
 is the property list for the given project.  PUB-DIR is the
 publishing directory.
 Return output file name."
   (org-publish-org-to 'altacv filename ".tex" plist pub-dir))
+
 ;;;###autoload
 (defun org-altacv-publish-to-pdf (plist filename pub-dir)
-  "Publish an Org file to a Beamer presentation (PDF, via LaTeX).
+  "Publish an Org file to a AltaCV document (PDF, via LaTeX).
 FILENAME is the filename of the Org file to be published.  PLIST
 is the property list for the given project.  PUB-DIR is the
 publishing directory.
 Return output file name."
-  ;; Unlike to `org-beamer-publish-to-latex', PDF file is generated in
+  ;; Unlike to `org-altacv-publish-to-latex', PDF file is generated in
   ;; working directory and then moved to publishing directory.
   (org-publish-attachment
    plist
@@ -350,8 +370,6 @@ Return output file name."
       (org-publish-org-to
        'altacv filename ".tex" plist (file-name-directory filename))))
    pub-dir))
+
 (provide 'ox-altacv)
-;; Local variables:
-;; generated-autoload-file: "org-loaddefs.el"
-;; End:
 ;;; ox-altacv.el ends here

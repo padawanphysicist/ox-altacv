@@ -232,7 +232,9 @@ Youngest CEO on Fortune's list of 50 most powerful women
 :ref_email: a.beta@university.edu
 :ref_address: Address Line 1\\Address line 2
 :end:
+
 {{{divider}}}
+
 ** Prof. Gamma Delta
 :properties:
 :cventry: cvref

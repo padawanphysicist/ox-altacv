@@ -5,6 +5,8 @@
 (setq project-directory (file-name-directory (directory-file-name this-directory)))
 (setq pub-directory (concat project-directory "public/"))
 
+(setenv "TEXMFHOME" (concat project-directory "texmf"))
+
 (unless (boundp 'org-publish-project-alist)
   (setq org-publish-project-alist nil))
 
@@ -15,7 +17,7 @@
  `("pdf"
    :base-directory ,this-directory
    :base-extension "org"
-   :publishing-directory ,(expand-file-name "pdf" pub-directory)
+   :publishing-directory ,project-directory
    :publishing-function org-altacv-publish-to-pdf))
 
 (defun org-publish-example ()
