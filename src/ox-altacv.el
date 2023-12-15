@@ -228,17 +228,17 @@ holding export options."
      (when email
        (format "  \\email{%s}\n" email)))
    ;; Address
-   (let ((addr (plist-get info :address)))
+   (let ((address (plist-get info :address)))
      (when address 
-       (format "  \\mailaddress{%s}\n" addr)))
+       (format "  \\mailaddress{%s}\n" address)))
    ;; Location
    (let ((location (plist-get info :location)))
      (when location
-       (format "  \\location{%s}\n" loc)))
+       (format "  \\location{%s}\n" location)))
    ;; LinkedIn
    (let ((linkedin (plist-get info :linkedin)))
      (when linkedin
-       (format "  \\linkedin{%s}\n" ln)))
+       (format "  \\linkedin{%s}\n" linkedin)))
    ;; Homepage   
    (let ((homepage (plist-get info :homepage)))
      (when homepage
