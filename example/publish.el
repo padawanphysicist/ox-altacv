@@ -1,6 +1,10 @@
 (require 'ox)
 (require 'ox-altacv)
 
+(add-to-list 'org-latex-logfiles-extensions "tex")
+(add-to-list 'org-latex-logfiles-extensions "bbl")
+(add-to-list 'org-latex-logfiles-extensions "xmpi")
+
 (setq this-directory (file-name-directory (or load-file-name buffer-file-name)))
 (setq project-directory (file-name-directory (directory-file-name this-directory)))
 (setq pub-directory (concat project-directory "public/"))
@@ -17,8 +21,9 @@
  `("pdf"
    :base-directory ,this-directory
    :base-extension "org"
-   :publishing-directory ,project-directory
-   :publishing-function org-altacv-publish-to-pdf))
+   :publishing-directory ,this-directory
+   :publishing-function org-altacv-publish-to-pdf
+   :completion-function ,(lambda (plist) (delete-file (concat this-directory "pdfa.xmpi")))))
 
 (defun org-publish-example ()
   (org-publish-project "pdf" t))
