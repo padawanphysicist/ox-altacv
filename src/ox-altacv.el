@@ -1,6 +1,6 @@
 ;;; ox-altacv.el --- AltaCV Back-End for Org Export Engine -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2007-2020 Free Software Foundation, Inc.
+;; Copyright (C) 2023 Free Software Foundation, Inc.
 
 ;; Author: Victor Santos <victor_santos@fisica.ufc.br>
 ;; Keywords: org, wp, tex
@@ -83,8 +83,8 @@
 (org-export-define-derived-backend 'altacv 'latex
   :menu-entry
   '(?l 1
-       ((?B "As LaTeX buffer (AltaCV)" org-altacv-export-as-latex)
-	(?b "As LaTeX file (AltaCV)" org-altacv-export-to-latex)
+       ((?A "As LaTeX buffer (AltaCV)" org-altacv-export-as-latex)
+	(?a "As LaTeX file (AltaCV)" org-altacv-export-to-latex)
 	(?P "As PDF file (AltaCV)" org-altacv-export-to-pdf)
 	(?O "As PDF file and open (AltaCV)"
 	    (lambda (a s v b)
@@ -176,6 +176,7 @@
   "Transcode HEADLINE element into AltaCV code.
 CONTENTS is the contents of the headline.  INFO is a plist used
 as a communication channel.
+
 Depending on the tag of the headline it is considered a section, an event...."
   (let* ((level (org-export-get-relative-level headline info))
          (tags (org-element-property :tags headline))
@@ -196,8 +197,8 @@ Depending on the tag of the headline it is considered a section, an event...."
       (org-altacv--format-cvref headline contents info))
      ((string= entry-type "cvtag")
       (format "\\cvtag{%s}%s" title (if contents contents "" )))
-     (t (format "\\section{%s}\n" title)))
-    ))
+     (t (format "\\section{%s}\n" title)))))
+
 (defun org-altacv-template (contents info)
   "Return complete document string after AltaCV conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist
@@ -228,28 +229,36 @@ holding export options."
        (format "  \\email{%s}\n" email)))
    ;; Address
    (let ((addr (plist-get info :address)))
-     (format "  \\mailaddress{%s}\n" addr))
+     (when address 
+       (format "  \\mailaddress{%s}\n" addr)))
    ;; Location
-   (let ((loc (plist-get info :location)))
-     (format "  \\location{%s}\n" loc))
+   (let ((location (plist-get info :location)))
+     (when location
+       (format "  \\location{%s}\n" loc)))
    ;; LinkedIn
-   (let ((ln (plist-get info :linkedin)))
-     (format "  \\linkedin{%s}\n" ln))
-   ;; Homepage
+   (let ((linkedin (plist-get info :linkedin)))
+     (when linkedin
+       (format "  \\linkedin{%s}\n" ln)))
+   ;; Homepage   
    (let ((homepage (plist-get info :homepage)))
-     (format "  \\homepage{%s}\n" homepage))
+     (when homepage
+       (format "  \\homepage{%s}\n" homepage)))
    ;; GitHub
    (let ((gh-uname (plist-get info :github)))
-     (format "  \\github{github.com/%s}\n" gh-uname))
+     (when gh-uname
+       (format "  \\github{github.com/%s}\n" gh-uname)))
    ;; GitLab
    (let ((gl-uname (plist-get info :gitlab)))
-     (format "  \\gitlab{gitlab.com/%s}\n" gl-uname))
+     (when gl-uname
+       (format "  \\gitlab{gitlab.com/%s}\n" gl-uname)))
    ;; OrcID
    (let ((orcid (plist-get info :orcid)))
-     (format "  \\orcid{%s}\n" orcid))
-   ;; OrcID
+     (when orcid
+       (format "  \\orcid{%s}\n" orcid)))
+   ;; Phone
    (let ((phone (plist-get info :phone)))
-     (format "  \\phone{%s}\n" phone))
+     (when phone
+       (format "  \\phone{%s}\n" phone)))
    "}\n"
    "\\makecvheader\n"
    "\\AtBeginEnvironment{itemize}{\\small}"
@@ -257,8 +266,7 @@ holding export options."
    (let ((column-ratio (plist-get info :column_ratio)))
      (format "\\columnratio{%s}" column-ratio))
    contents
-   "\\end{document}"
-   ))
+   "\\end{document}"))
 
 ;;; Commands
 
